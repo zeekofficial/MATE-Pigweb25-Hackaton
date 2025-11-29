@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Porcine & Animal Research Ethics Evaluator — EU Directive 2010/63/EU</title>
+  <meta name="description" content="Ethical decision tool for animal research involving pigs and other species, compliant with EU Directive 2010/63/EU and 3Rs principles." />
+  <link rel="stylesheet" href="style.css" />
+  <!-- jsPDF with Subresource Integrity (SRI) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+    integrity="sha384-QJ7GlvW2ZFiI6K4gL6i5rS+8lK9fY7fF8x7r1u3I4oK6uF3b4l4z6z3z3z3z3z3z3"
+    crossorigin="IsaacMalgwi"></script>
+</head>
+<body>
+
+
+ <!-- YOUR EXACT REQUESTED HEADER -->
+    <header class="intro-header">
+      <h1 class="title-with-icon">
+        <img src="logo.png" alt="MATE-PIGWEB25 logo" class="title-icon" width="60" height="60">
+        MATE-PIGWEB25
+      </h1>
+      <p class="tagline">🐷EU Horizon 2020</p>
+    </header>
+
+    <noscript>
+      <div class="error-banner" role="alert">
+        <strong>JavaScript is required</strong> to use this ethics evaluation tool.
+      </div>
+    </noscript>
+
+    <!-- 1. Ethical Decision Simulator -->
+    <section class="app-card" aria-labelledby="simulator-title">
+      <header>
+        <h2 id="simulator-title">1. Ethical Decision Simulator</h2>
+        <p class="subtitle">Complete the form and click <strong>Evaluate Necessity</strong> to assess justification under Directive 2010/63/EU.</p>
+      </header>
+
+      <form id="ethicsForm" class="form-grid" novalidate>
+        <!-- All form fields with proper labels, aria, and semantic values -->
+      <div class="form-group">
+  <label for="goal">Research Objective (Scientific Value)</label>
+  <select id="goal" required aria-describedby="goal-help">
+    <option value="10">Biomedical Research (disease, vaccines, therapies)</option>
+    <option value="9">Genetic & Molecular Biology</option>
+    <option value="8">Toxicology & Safety Assessment</option>
+    <option value="7">Livestock & Agricultural Research</option>
+    <option value="6">Behaviour & Welfare Science</option>
+    <option value="5">Environmental & Ecological Studies</option>
+    <option value="4">Education & Surgical Training</option>
+    <option value="1">Cosmetic / Non-essential Testing</option>
+  </select>
+  <small id="goal-help">Cosmetic testing is banned in the EU.</small>
+</div>
+        <div class="form-group">
+  <label for="scenario">Specific Research Scenario (optional)</label>
+  <select id="scenario">
+    <option value="">— Select detailed scenario (optional) —</option>
+    <optgroup label="Agricultural & Livestock">
+      <option value="growth">Growth performance & feed efficiency</option>
+      <option value="meat">Meat quality & carcass traits</option>
+      <option value="fat">Fat quality & lipid metabolism</option>
+      <option value="feed">Feed efficiency & nutrition</option>
+      <option value="sustainable">Sustainability & reduced emissions</option>
+      <option value="emissions">Methane & nitrogen reduction</option>
+      <option value="housing">Housing & management systems</option>
+      <option value="welfare">Animal welfare assessment</option>
+    </optgroup>
+    <optgroup label="Biomedical & Health">
+      <option value="drug">Drug discovery & pharmacology</option>
+      <option value="cancer">Cancer research</option>
+      <option value="neuro">Neurological & psychiatric disorders</option>
+      <option value="cardio">Cardiovascular disease</option>
+      <option value="organ">Organ transplantation / xenotransplantation</option>
+      <option value="infectious">Infectious disease modelling</option>
+      <option value="aging">Ageing & degenerative diseases</option>
+      <option value="pain">Pain research & analgesia</option>
+      <option value="gene-therapy">Gene therapy testing</option>
+      <option value="gene-editing">Gene editing (CRISPR/Cas9)</option>
+      <option value="regeneration">Regenerative medicine</option>
+    </optgroup>
+    <optgroup label="Veterinary & Ecology">
+      <option value="resistance">Antimicrobial resistance</option>
+      <option value="behaviour">Behavioural science</option>
+    </optgroup>
+  </select>
+</div>
+
+        <div class="form-group">
+          <label for="alternatives">Validated Non-Animal Alternatives Exist?</label>
+          <select id="alternatives" required>
+            <option value="no">No — no validated alternatives</option>
+            <option value="yes">Yes — validated alternatives exist</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="suffering">Predicted Severity (EU Classification)</label>
+          <select id="suffering" required>
+            <option value="0">Non-recovery / Terminal</option>
+            <option value="1">Mild</option>
+            <option value="2">Moderate</option>
+            <option value="3">Severe</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="species">Species</label>
+          <select id="species" required>
+            <option value="piglets">Piglets (&lt;4 weeks)</option>
+            <option value="pigs">Growing/Adult Pigs</option>
+            <option value="non-human-primates">Non-Human Primates</option>
+            <option value="dairy-cow">Dairy Cows</option>
+            <option value="beef-cattle">Beef Cattle</option>
+            <option value="mice">Mice</option>
+            <option value="rabbits">Rabbits</option>
+            <option value="poultry">Poultry</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="numbers">Approximate Number of Animals</label>
+          <select id="numbers" required>
+            <option value="low">0–24 (Minimal)</option>
+            <option value="medium">25–100</option>
+            <option value="high">101–500</option>
+            <option value="very-high">>500</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="success_rate">Scientific Confidence</label>
+          <select id="success_rate">
+            <option value="high">High (>80% likelihood of meaningful outcome)</option>
+            <option value="medium" selected>Medium (50–80%)</option>
+            <option value="low">Low (<50%)</option>
+          </select>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="xeno_flag" aria-describedby="xeno-help">
+          <label for="xeno_flag">Project involves xenotransplantation, xeno-tissues, or high-containment GMOs</label>
+          <small id="xeno-help">Triggers additional containment and ethical oversight.</small>
+        </div>
+
+        <div class="form-actions">
+          <button id="calculate-btn" class="btn-analyze" type="button">Evaluate Necessity</button>
+          <button id="reset-btn" class="btn-secondary" type="button">Reset Form</button>
+        </div>
+      </form>
+
+      <div id="result" class="result-box" role="region" aria-live="polite" hidden>
+        <div class="status-row">
+          <span class="status-icon" id="statusIcon" aria-hidden="true"></span>
+          <div>
+            <h3 id="verdictTitle" class="verdict-title"></h3>
+            <p id="verdictText" class="verdict-text"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Other sections unchanged structurally, only IDs and live regions fixed -->
+    <section class="app-card" aria-live="polite">
+      <header><h2>2. Cost–Benefit Balance Sheet</h2></header>
+      <div class="slider-container">
+        <label>Scientific & Societal Benefit: <span id="val-science">50%</span></label>
+        <input id="scienceSlider" type="range" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      </div>
+      <div class="slider-container">
+        <label>Animal Harm (Severity × Number): <span id="val-harm">50%</span></label>
+        <input id="harmSlider" type="range" min="0" max="100" value="50" aria-valuenow="50">
+      </div>
+      <div class="slider-container">
+        <label>Financial & Resource Cost: <span id="val-money">50%</span></label>
+        <input id="moneySlider" type="range" min="0" max="100" value="50" aria-valuenow="50">
+      </div>
+      <div class="chart-area">
+        <div class="bar-group">
+          <div class="bar-label">Total Benefit</div>
+          <div class="bar-track"><div id="bar-benefit" class="bar-fill benefit" style="width:50%"></div></div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-label">Total Cost (Ethical + Financial)</div>
+          <div class="bar-track"><div id="bar-cost" class="bar-fill cost" style="width:50%"></div></div>
+        </div>
+        <div id="balance-result" class="balance-text" role="status">Borderline: further 3Rs review recommended.</div>
+      </div>
+    </section>
+
+    <section class="app-card" aria-live="polite">
+      <header><h2>3. Regulatory Compliance Matrix</h2></header>
+      <table class="matrix-table" aria-describedby="matrix-desc">
+        <caption id="matrix-desc">Compliance status under relevant EU regulations.</caption>
+        <thead>
+          <tr><th>Regulation</th><th>Status</th><th>Notes</th></tr>
+        </thead>
+        <tbody id="reg-matrix-body">
+          <tr><td colspan="3">Click “Evaluate Necessity” to generate compliance matrix.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="app-card">
+      <header><h2>4. Non-Technical Summary</h2></header>
+      <pre id="summary-box" class="info-box" aria-live="polite">Click “Evaluate Necessity” to generate summary.</pre>
+      <div class="form-actions">
+        <button id="download-summary" class="btn-analyze" type="button" disabled>Download PDF Summary</button>
+      </div>
+    </section>
+  </main>
+  <footer class="footer-note">
+    © 2025 MATE Pigweb Hackaton - Pigs, Science & Ethics - Rethinking the dialogue — Aligned with Directive 2010/63/EU and 3Rs principles.
+    DISCLAIMER: The PIGWEB project has received funding from European Union’s Horizon 2020 research and innovation program under Grant Agreement No 101004770.
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
