@@ -298,6 +298,68 @@ function finalizeCalculation(benefitVal, harmVal, outcome, data) {
   const btn = $('download-summary');
   if (btn) { btn.disabled = false; btn.textContent = 'Download PDF Summary'; }
 }
+// 6. NCBI API (Updated with Robust Proxy)
+async function fetchGene() {
+    const geneInput = document.getElementById('geneSearch').value.trim();
+    if (!geneInput) return;
+
+    const resultDiv = document.getElementById('ncbiResult');
+    resultDiv.innerHTML = "⏳ Searching NCBI Pig Database...";
+    resultDiv.style.color = "#0c4a6e"; 
+
+    try {
+        // We use corsproxy.io because it is faster and more reliable than allorigins
+        const baseUrl = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
+        const searchParams = `db=gene&term=${geneInput}[sym]+AND+sus+scrofa[orgn]&retmode=json`;
+        
+        // Construct URL
+        const targetUrl = `${baseUrl}/esearch.fcgi?${searchParams}`;
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+
+        // STEP 1: Search for ID
+        const searchRes = await fetch(proxyUrl);
+        if (!searchRes.ok) throw new Error("Network response was not ok");
+        
+        const searchJson = await searchRes.json(); // Direct JSON (no .contents parsing needed for this proxy)
+
+        if (!searchJson.esearchresult || !searchJson.esearchresult.idlist || searchJson.esearchresult.idlist.length === 0) {
+            throw new Error(`Gene '${geneInput}' not found in Pig (Sus scrofa) database.`);
+        }
+
+        const geneId = searchJson.esearchresult.idlist[0];
+
+        // STEP 2: Get Summary
+        const summaryTarget = `${baseUrl}/esummary.fcgi?db=gene&id=${geneId}&retmode=json`;
+        const summaryProxy = `https://corsproxy.io/?${encodeURIComponent(summaryTarget)}`;
+        
+        const summaryRes = await fetch(summaryProxy);
+        const summaryJson = await summaryRes.json();
+
+        // Check if result exists
+        if (!summaryJson.result || !summaryJson.result[geneId]) {
+            throw new Error("Details not found for this gene.");
+        }
+
+        const info = summaryJson.result[geneId];
+
+        // STEP 3: Display
+        resultDiv.innerHTML = `
+            <div style="text-align: left; line-height: 1.6;">
+                <strong style="color: var(--primary); font-size: 16px;">${info.name}</strong> 
+                <span style="color: #666;">(ID: ${geneId})</span><br>
+                <strong>Description:</strong> ${info.description}<br>
+                <strong>Organism:</strong>  ${info.organism.scientificname}<br>
+                <strong>Location:</strong> Chromosome ${info.chromosome || '?'}, Map: ${info.maplocation || 'N/A'}<br>
+                <div style="margin-top:5px; font-size:12px; color:#555;">${info.summary ? info.summary : "No detailed summary available."}</div>
+            </div>
+        `;
+
+    } catch (e) {
+        console.error(e);
+        resultDiv.innerHTML = `❌ <strong>Error:</strong> ${e.message}. <br><small>Check your internet connection or try disabling ad-blockers.</small>`;
+        resultDiv.style.color = "var(--danger)";
+    }
+}
 
 function downloadPDF() {
   const win = window.open('', '_blank');
