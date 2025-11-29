@@ -188,16 +188,8 @@
         <div id="balance-result" class="balance-text" role="status">Borderline: further 3Rs review recommended.</div>
       </div>
     </section>
-    <section class="app-card" style="border: 2px solid #bae6fd; background:#f0f9ff;">
-        <h3>🧬 NCBI Gene Lookup (Live API)</h3>
-        <div style="display:flex; gap:10px;">
-            <input type="text" id="geneSearch" placeholder="e.g. INS, BRCA1, TNF">
-            <button onclick="fetchGene()" style="width:auto; padding:0 20px; border-radius:10px; border:none; background:var(--primary); color:white; cursor:pointer;">Search</button>
-        </div>
-        <div id="ncbiResult">Waiting for input...</div>
-    </section>
-    <section class="app-card" aria-live="polite">
-      <header><h2>3. Regulatory Compliance Matrix</h2></header>
+  
+         <header><h2>3. Regulatory Compliance Matrix</h2></header>
       <table class="matrix-table" aria-describedby="matrix-desc">
         <caption id="matrix-desc">Compliance status under relevant EU regulations.</caption>
         <thead>
@@ -208,7 +200,16 @@
         </tbody>
       </table>
     </section>
-
+ <section class="app-card" style="border: 2px solid #bae6fd; background:#f0f9ff;">
+        <h3>🧬 NCBI Gene Lookup (Live API)</h3>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="geneSearch" placeholder="e.g. INS, BRCA1, TNF">
+            <button onclick="fetchGene()" style="width:auto; padding:0 20px; border-radius:10px; border:none; background:var(--primary); color:white; cursor:pointer;">Search</button>
+        </div>
+        <div id="ncbiResult">Waiting for input...</div>
+    </section>
+    <section class="app-card" aria-live="polite">
+      
     <section class="app-card">
       <header><h2>4. Non-Technical Summary</h2></header>
       <pre id="summary-box" class="info-box" aria-live="polite">Click “Evaluate Necessity” to generate summary.</pre>
@@ -225,3 +226,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
